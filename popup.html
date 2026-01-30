@@ -5,36 +5,224 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>StudyTube Filter</title>
   <style>
-    body { font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif; padding: 12px; width: 320px; }
-    label { display:block; font-size: 12px; opacity:.8; margin-top: 10px; }
-    input, button, textarea { width: 100%; font: inherit; box-sizing: border-box; }
-    input { padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,.15); }
-    button { margin-top: 10px; padding: 9px 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,.15); cursor: pointer; background: #111; color:#fff; }
-    .row { display:flex; gap: 8px; }
-    .muted { font-size: 12px; opacity: .75; line-height: 1.4; }
-    pre { background: #111; color: #eee; padding: 10px; border-radius: 10px; overflow: auto; max-height: 160px; }
-    .ok { color: #0a0; }
-    .ng { color: #c00; }
+    body {
+      font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+      margin: 0;
+      background: #fff;
+    }
+    .popup-body {
+      width: 340px;
+      padding: 16px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 12px;
+      opacity: .85;
+      margin: 0;
+    }
+    input, button, textarea {
+      font: inherit;
+      box-sizing: border-box;
+    }
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,.15);
+    }
+    .row {
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .row button {
+      margin-top: 0;
+      width: auto;
+      flex: 0;
+    }
+    .row input {
+      flex: 1;
+    }
+    button {
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,.15);
+      background: #111;
+      color: #fff;
+      padding: 10px;
+      cursor: pointer;
+      font: inherit;
+      transition: background .2s ease;
+    }
+    button:hover {
+      background: #222;
+    }
+    button.wide {
+      width: 100%;
+      flex: 1;
+    }
+    button.small {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+    .muted {
+      font-size: 12px;
+      opacity: .75;
+      line-height: 1.4;
+    }
+    .status-message {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #f4f4f4;
+      color: #111;
+      border: 1px solid transparent;
+      min-height: 20px;
+    }
+    .status-message.ok {
+      border-color: #0a0;
+      color: #0a0;
+    }
+    .status-message.ng {
+      border-color: #c00;
+      color: #c00;
+    }
+    .limit-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+    .limit-field span {
+      display: block;
+      font-size: 11px;
+      opacity: .7;
+      margin-bottom: 4px;
+    }
+    #approvedList {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      padding:0;
+      margin:0;
+      list-style:none;
+      min-height: 22px;
+    }
+    #approvedList li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 4px 8px;
+      background: #f6f6f6;
+      font-size: 12px;
+    }
+    #approvedList li button {
+      padding: 3px 6px;
+      font-size: 11px;
+    }
+    .keywords-section {
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+    .keywords-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    button.text-button {
+      background: transparent;
+      border: none;
+      color: #111;
+      font-weight: 600;
+      padding: 4px 6px;
+    }
+    .keywords-content {
+      background: #111;
+      color: #eee;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 6px;
+      font-size: 11px;
+      line-height: 1.4;
+      max-height: 140px;
+      overflow: auto;
+      display: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .keywords-content.visible {
+      display: block;
+    }
   </style>
 </head>
 <body>
-  <h3 style="margin:0 0 6px;">StudyTube Filter</h3>
-  <div class="muted">学習テーマに関連するタイトルだけ表示します（YouTubeはSPAなので自動で追従）。</div>
+  <div class="popup-body">
+    <h3 style="margin:0;">StudyTube Filter</h3>
+    <div class="muted">学習テーマに関連するタイトルだけ表示します（YouTubeはSPAなので自動で追従）。</div>
 
-  <label>OpenAI API Key（個人利用）</label>
-  <input id="apiKey" type="password" placeholder="sk-..." />
+    <section class="section">
+      <label>OpenAI API Key（個人利用）</label>
+      <input id="apiKey" type="password" placeholder="sk-..." />
+    </section>
 
-  <label>学習テーマ</label>
-  <input id="theme" type="text" placeholder="例：生成AI" />
+    <section class="section">
+      <label>学習テーマ</label>
+      <input id="theme" type="text" placeholder="例：生成AI" />
+      <div id="themeStatus" class="muted"></div>
+      <div class="row">
+        <button id="apply" class="wide">適用（キーワード生成）</button>
+      </div>
+      <div id="status" class="status-message muted"></div>
+    </section>
 
-  <div class="row">
-    <button id="apply">適用（キーワード生成）</button>
+    <section class="section">
+      <label>制限モードの上限（分）</label>
+      <div class="muted" style="font-size:11px;">日次／セッションそれぞれの上限を入力してください。</div>
+      <div class="limit-fields">
+        <div class="limit-field">
+          <span>1日上限</span>
+          <input id="dailyQuota" type="number" min="0" placeholder="例：30" />
+        </div>
+        <div class="limit-field">
+          <span>1セッション上限</span>
+          <input id="sessionQuota" type="number" min="0" placeholder="例：25" />
+        </div>
+      </div>
+      <button id="saveQuota" type="button" class="wide">保存</button>
+    </section>
+
+    <section class="section">
+      <label>承認済み学習テーマ</label>
+      <ul id="approvedList" class="muted"></ul>
+      <div class="row">
+        <input id="approvedInput" type="text" placeholder="例：AI" />
+        <button id="addApproved">追加</button>
+      </div>
+    </section>
+
+    <section class="section keywords-section">
+      <div class="keywords-header">
+        <label>allowedKeywords（保存値）</label>
+        <button id="toggleKeywords" type="button" class="text-button">表示</button>
+      </div>
+      <pre id="keywords" class="keywords-content">(未設定)</pre>
+    </section>
   </div>
-
-  <div id="status" class="muted" style="margin-top:10px;"></div>
-
-  <label>allowedKeywords（保存値）</label>
-  <pre id="keywords">(未設定)</pre>
 
   <script src="popup.js"></script>
 </body>

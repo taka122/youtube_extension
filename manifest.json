@@ -5,6 +5,9 @@
   "description": "学習テーマに関連する動画タイトルだけ表示し、それ以外のYouTubeレコメンドを非表示にする",
   "permissions": ["storage", "scripting"],
   "host_permissions": ["https://www.youtube.com/*", "https://api.openai.com/*"],
+  "background": {
+    "service_worker": "service_worker.js"
+  },
   "action": {
     "default_title": "StudyTube Filter",
     "default_popup": "popup.html"
